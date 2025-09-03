@@ -1,37 +1,12 @@
-interface Review {
-  comment: string;
-  date: string;
-  rating: number;
-  reviewerEmail: string;
-  reviewerName: string;
-}
-
-export interface Product {
-  availabilityStatus: string;
-  brand: string;
-  category: string;
-  description: string;
-  dimensions: { width: number; height: number; depth: number };
-  discountPercentage: number;
-  id: number;
-  images: string[];
-  meta: {
-    createdAt: string;
-    updatedAt: string;
-    barcode: string;
-    qrCode: string;
-  };
-  minimumOrderQuantity: number;
-  price: number;
-  rating: number;
-  returnPolicy: string;
-  reviews: Review[];
-  shippingInformation: string;
-  sku: string;
-  stock: 99;
-  tags: string[];
-  thumbnail: string;
-  title: string;
-  warrantyInformation: string;
-  weight: number;
+export interface FilterContextType {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  selectedCategory: string;
+  setSelectedCategory: (category: string) => void;
+  minPrice: number | undefined;
+  setMinPrice: (price: number | undefined) => void;
+  maxPrice: number | undefined;
+  setMaxPrice: (price: number | undefined) => void;
+  keyword: string;
+  setKeyword: (keyword: string) => void;
 }
