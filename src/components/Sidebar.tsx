@@ -16,18 +16,9 @@ const Sidebar = () => {
     setMinPrice,
     maxPrice,
     setMaxPrice,
-    setKeyword,
   } = useFilter();
 
   const [categories] = useState<string[]>(uniqueCategory);
-  const [keywords] = useState<string[]>([
-    'apple',
-    'watch',
-    'fashion',
-    'trend',
-    'shoes',
-    'shirt',
-  ]);
 
   const handleNumberChange =
     (setter: (value: number | undefined) => void) =>
@@ -40,20 +31,15 @@ const Sidebar = () => {
     setSelectedCategory(category);
   };
 
-  const handleKeywordClick = (keyword: string) => {
-    setKeyword(keyword);
-  };
-
   const handleResetFilters = () => {
     setSearchQuery('');
     setSelectedCategory('');
     setMinPrice(undefined);
     setMaxPrice(undefined);
-    setKeyword('');
   };
 
   return (
-    <div className="w-64 p-5 h-screen">
+    <div className="w-72 p-5 h-screen ml-5">
       <h1 className="text-2xl font-bold mb-10 mt-4">React Store</h1>
 
       <section className="sidebar flex flex-col gap-4 w-full">
@@ -97,21 +83,6 @@ const Sidebar = () => {
                 />
                 {category.toUpperCase()}
               </label>
-            ))}
-          </div>
-        </div>
-
-        <div className="keywords flex flex-col ">
-          <h2 className="text-2xl font-semibold">Keywords</h2>
-          <div className="keywords__list flex flex-col gap-4 mt-5">
-            {keywords.map((keyword, index) => (
-              <button
-                key={index}
-                className="px-3 py-1 text-left border rounded-md border-neutral-400 hover:bg-gray-200"
-                onClick={() => handleKeywordClick(keyword)}
-              >
-                {keyword.toUpperCase()}
-              </button>
             ))}
           </div>
         </div>

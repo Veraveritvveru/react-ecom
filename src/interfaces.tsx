@@ -44,3 +44,10 @@ export interface Product {
   images: string[];
   thumbnail: string;
 }
+
+export interface BookCardProps {
+  id: number;
+  title: string;
+  image: string;
+  price: number;
+}

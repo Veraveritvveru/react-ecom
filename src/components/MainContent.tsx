@@ -3,26 +3,20 @@ import { useFilter } from '../hooks/useFilter';
 import { Tally3 } from 'lucide-react';
 import productsData from '../products.json';
 import { Product } from '../interfaces';
+import BookCard from './BookCard';
 
 const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
     useFilter();
   const [products, setProducts] = useState<Product[]>([]);
   const [filter, setFilter] = useState('all');
-  const [currentPage] = useState(1);
-  const [drodownOpen] = useState(true);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [drodownOpen, setDropdownOpen] = useState(true);
+  const [drodownOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [drodownOpen, setDropdownOpen] = useState(false);
   const itemsPerPage = 12;
 
   useEffect(() => {
-    let filtered = productsData.products;
-
-    if (keyword) {
-      filtered = filtered.filter((p) =>
-        p.title.toLowerCase().includes(keyword.toLowerCase())
-      );
-    }
+    const filtered = productsData.products;
 
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
@@ -74,10 +68,36 @@ const MainContent = () => {
   };
 
   const filterProducts = getFilteredProducts();
-  console.log(filterProducts);
+  const totalProducts = 76;
+  const totalPages = Math.ceil(totalProducts / itemsPerPage);
+
+  const handleChangePage = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const getPaginationBtns = () => {
+    const buttons: number[] = [];
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, currentPage + 2);
+
+    if (currentPage - 2 < 1) {
+      endPage = Math.min(totalPages, endPage + (2 - (currentPage - 1)));
+    }
+    if (currentPage + 2 > totalPages) {
+      startPage = Math.min(1, startPage - (2 - (totalPages - currentPage)));
+    }
+
+    for (let page = startPage; page <= endPage; page++) {
+      buttons.push(page);
+    }
+
+    return buttons;
+  };
 
   return (
-    <section className="xl:w-[55rem] lg:w-[55rem] sm:w-[40rem] xs:w-[20rem] p-5">
+    <section className="xl:w-[55rem] lg:w-[55rem] sm:w-[40rem] xs:w-[20rem] p-5 max-w-[1440px] mx-auto">
       <div className="mb-5">
         <div className="flex flex-col justify-between items-center sm:flex-row">
           <div className="filter-wrapper relative mb-5 mt-5">
@@ -115,20 +135,49 @@ const MainContent = () => {
         </div>
 
         <div className="book-list grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 gap-5">
-          {/* {Bookcard} */}
+          {filterProducts.map((product) => {
+            return (
+              <BookCard
+                id={product.id}
+                key={product.id}
+                title={product.title}
+                image={product.thumbnail}
+                price={product.price}
+              />
+            );
+          })}
         </div>
 
         <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
           <button
             disabled={currentPage === 1}
             className="border px-4 py-2 mx-2 rounded-full"
+            onClick={() => handleChangePage(currentPage - 1)}
           >
             Previous
           </button>
 
-          <div className="flex flex-wrap justify-center"></div>
+          <div className="flex flex-wrap justify-center">
+            {getPaginationBtns().map((page) => (
+              <button
+                key={page}
+                onClick={() => handleChangePage(page)}
+                className={`border px-4 py-2 mx-1 rounded-full ${
+                  page === currentPage ? 'bg-black text-white' : ''
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
 
-          <button className="border px-4 py-2 mx-2 rounded-full">Next</button>
+          <button
+            onClick={() => handleChangePage(currentPage + 1)}
+            className="border px-4 py-2 mx-2 rounded-full"
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
         </div>
       </div>
     </section>
